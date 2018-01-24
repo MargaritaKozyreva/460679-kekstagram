@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Margarita Kozyreva](https://up.htmlacademy.ru/javascript/12/user/460679).
-* Наставник: `Неизвестно`.
+* Наставник: `Леонид Лебедев`.
 
 ---
 
