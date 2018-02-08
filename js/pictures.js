@@ -1,7 +1,8 @@
 'use strict';
 
-var createdWizards = [];
-var commentPhrase = [
+var createdPublication = [];
+var PUBLICATIONS_COUNT = 25;
+var COMMENT_PHRASE = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -15,8 +16,7 @@ function getPhotoURL(id) {
 }
 
 function getRandomNumber(maxValue, minValue) {
-  var randNum = Math.round(Math.random() * (maxValue - minValue) + minValue);
-  return randNum;
+  return Math.round(Math.random() * (maxValue - minValue) + minValue);
 }
 
 function getLikeValue() {
@@ -27,20 +27,19 @@ function getRandomComments() {
   var commentsArray = [];
   var randNumberComments = Math.round(Math.random() + 1);
   for (var i = 0; i < randNumberComments; i++) {
-    commentsArray.push(commentPhrase[Math.round(Math.random() * (commentPhrase.length - 1))]);
+    commentsArray.push(COMMENT_PHRASE[Math.round(Math.random() * (COMMENT_PHRASE.length - 1))]);
   }
   return commentsArray;
 }
 
 function getPublication() {
   return {
-    url: getPhotoURL(getRandomNumber(25, 1)),
+    url: getPhotoURL(getRandomNumber(PUBLICATIONS_COUNT, 1)),
     likes: getLikeValue(),
     comments: getRandomComments()
   };
 }
 
-var fragment = document.createDocumentFragment();
 function getPublicationElement(photo) {
   var similarPictureTemplate = document.querySelector('#picture-template').content;
   var photoElement = similarPictureTemplate.cloneNode(true);
@@ -50,9 +49,10 @@ function getPublicationElement(photo) {
   return photoElement;
 }
 
-for (var k = 0; k < 25; k++) {
-  createdWizards.push(getPublication(k));
-  fragment.appendChild(getPublicationElement(createdWizards[k]));
+var fragment = document.createDocumentFragment();
+for (var k = 0; k < PUBLICATIONS_COUNT; k++) {
+  createdPublication.push(getPublication(k));
+  fragment.appendChild(getPublicationElement(createdPublication[k]));
 }
 
 var appendPictures = document.querySelector('.pictures');
@@ -60,6 +60,6 @@ appendPictures.appendChild(fragment);
 var overLay = document.querySelector('.gallery-overlay');
 overLay.classList.remove('hidden');
 
-overLay.querySelector('.gallery-overlay-image').src = createdWizards[0].url;
-overLay.querySelector('.likes-count').textContent = createdWizards[0].likes + '';
-overLay.querySelector('.comments-count').textContent = createdWizards[0].comments.length + '';
+overLay.querySelector('.gallery-overlay-image').src = createdPublication[0].url;
+overLay.querySelector('.likes-count').textContent = createdPublication[0].likes + '';
+overLay.querySelector('.comments-count').textContent = createdPublication[0].comments.length + '';
