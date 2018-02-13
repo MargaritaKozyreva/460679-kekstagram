@@ -90,6 +90,7 @@ closeUploadForm.addEventListener('click', function () {
   document.querySelector('.upload-overlay').classList.add('hidden');
   document.querySelector('.upload-message').classList.add('hidden');
   effectImagePrewiew.style.filter = 'none';
+  uploadEffectLevel.style.display = 'none';
 });
 
 document.addEventListener('keydown', function (evt) {
@@ -97,6 +98,7 @@ document.addEventListener('keydown', function (evt) {
     document.querySelector('.upload-overlay').classList.add('hidden');
     document.querySelector('.upload-message').classList.add('hidden');
     effectImagePrewiew.style.filter = 'none';
+    uploadEffectLevel.style.display = 'none';
   }
 });
 
