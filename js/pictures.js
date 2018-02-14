@@ -87,6 +87,8 @@ for (var z = 0; z < picturesContainer.length; z++) {
     evt.preventDefault();
     overLay.classList.remove('hidden');
     document.querySelector('.gallery-overlay-image').src = evt.target.getAttribute('src');
+    document.querySelector('.likes-count').textContent = event.target.className = '' ;
+    document.querySelector('.comments-count').textContent = '';
   });
 }
 
