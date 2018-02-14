@@ -35,9 +35,7 @@
         <fieldset class="upload-resize-controls">
           <button type="button"
                   class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–
-          </button><!--
-          --><input type="text" class="upload-resize-control upload-resize-controls-value" value = "55" readonly title="Image Scale" name="scale"></span><!--
-          --><button type="button"
+          </button><input type="text" class="upload-resize-control upload-resize-controls-value" value = "100%" readonly title="Image Scale" name="scale"><button type="button"
                   class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+
           </button>
         </fieldset>
@@ -93,9 +91,9 @@
           </label>
         </fieldset>
 
-        <input class="upload-form-hashtags" name="hashtags" placeholder="#хэш-тег">
+        <input class="upload-form-hashtags" required name="hashtags" placeholder="#хэш-тег">
 
-        <textarea class="upload-form-description" name="description" placeholder="Ваш комментарий..."></textarea>
+        <textarea class="upload-form-description" required name="description" placeholder="Ваш комментарий..."></textarea>
 
         <button class="upload-form-cancel" type="reset" id="upload-cancel" tabindex="0">Закрыть</button>
         <button class="upload-form-submit" type="submit" id="upload-submit">Отправить</button>

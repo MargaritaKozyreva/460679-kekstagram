@@ -58,39 +58,51 @@ for (var k = 0; k < PUBLICATIONS_COUNT; k++) {
 var appendPictures = document.querySelector('.pictures');
 appendPictures.appendChild(fragment);
 
-/* var overLay = document.querySelector('.gallery-overlay');
-overLay.classList.remove('hidden');
-
-overLay.querySelector('.gallery-overlay-image').src = createdPublication[0].url;
-overLay.querySelector('.likes-count').textContent = createdPublication[0].likes + '';
-overLay.querySelector('.comments-count').textContent = createdPublication[0].comments.length + '';*/
-
-var upploadFile = document.querySelector('#upload-file');
-var closeUploadForm = document.querySelector('.upload-form-cancel');
-var uploadResizeDec = document.querySelector('.upload-resize-controls-button-dec');
-var uploadResizeInc = document.querySelector('.upload-resize-controls-button-inc');
-var uploadResizeValue = document.querySelector('.upload-resize-controls-value');
-var effectImagePrewiew = document.querySelector('.effect-image-preview');
-var uploadEffect = document.querySelectorAll('[name="effect"]');
-var uploadEffectLevel = document.querySelector('.upload-effect-level');
-var uploadLevelPin = document.querySelector('.upload-effect-level-pin');
-var uploadLevelValue = document.querySelector('.upload-effect-level-value');
-var uploadLevelVal = document.querySelector('.upload-effect-level-val');
+var uploadForm = document.querySelector('.upload-form');
+var uploadFile = uploadForm.querySelector('#upload-file');
+var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
+var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
+var resizeIncButton = uploadForm.querySelector('.upload-resize-controls-button-inc');
+var uploadResizeValue = uploadForm.querySelector('.upload-resize-controls-value');
+var effectImagePrewiew = uploadForm.querySelector('.effect-image-preview');
+var uploadEffect = uploadForm.querySelectorAll('[name="effect"]');
+var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
+var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
+var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
+var uploadLevelValue = uploadForm.querySelector('.upload-effect-level-value');
+var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
+var picturesContainer = appendPictures.querySelectorAll('.picture');
+var overLay = document.querySelector('.gallery-overlay');
+var overLayClose = overLay.querySelector('.gallery-overlay-close');
 var filterValue = 'none';
 
-upploadFile.addEventListener('change', function () {
+uploadFile.addEventListener('change', function () {
   document.querySelector('.upload-overlay').classList.remove('hidden');
   document.querySelector('.upload-message').classList.remove('hidden');
-
   effectImagePrewiew.style.transform = 'scale(1)';
-  uploadResizeValue.value = '100%';
 });
 
-closeUploadForm.addEventListener('click', function () {
-  document.querySelector('.upload-overlay').classList.add('hidden');
-  document.querySelector('.upload-message').classList.add('hidden');
-  effectImagePrewiew.style.filter = 'none';
-});
+for (var z = 0; z < picturesContainer.length; z++) {
+  picturesContainer[z].addEventListener('click', function (evt) {
+    evt.preventDefault();
+    overLay.classList.remove('hidden');
+    document.querySelector('.gallery-overlay-image').src = evt.target.getAttribute('src');
+    document.querySelector('.likes-count').textContent = event.target.className = '' ;
+    document.querySelector('.comments-count').textContent = '';
+  });
+}
+
+function closePhoto(val) {
+  val.addEventListener('click', function () {
+    effectImagePrewiew.style.filter = 'none';
+    document.querySelector('.upload-overlay').classList.add('hidden');
+    document.querySelector('.upload-message').classList.add('hidden');
+    overLay.classList.add('hidden');
+  });
+}
+
+closePhoto(closeUploadFormButton);
+closePhoto(overLayClose);
 
 document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC) {
@@ -102,8 +114,8 @@ document.addEventListener('keydown', function (evt) {
 
 var STEP_CHANGE = 25;
 
-uploadResizeDec.addEventListener('click', function () {
-  var uploadNumber = Number.parseInt(uploadResizeValue.value, 0);
+resizeDecButton.addEventListener('click', function () {
+  var uploadNumber = parseInt(uploadResizeValue.value, 10);
   if (uploadNumber > STEP_CHANGE && uploadNumber <= 100) {
     uploadNumber = uploadNumber - STEP_CHANGE;
     uploadResizeValue.value = uploadNumber + '%';
@@ -111,8 +123,8 @@ uploadResizeDec.addEventListener('click', function () {
   }
 });
 
-uploadResizeInc.addEventListener('click', function () {
-  var uploadNumber = Number.parseInt(uploadResizeValue.value, 0);
+resizeIncButton.addEventListener('click', function () {
+  var uploadNumber = parseInt(uploadResizeValue.value, 10);
   if (uploadNumber >= STEP_CHANGE && uploadNumber < 100) {
     uploadNumber = uploadNumber + STEP_CHANGE;
     uploadResizeValue.value = uploadNumber + '%';
@@ -122,18 +134,18 @@ uploadResizeInc.addEventListener('click', function () {
 
 uploadEffectLevel.style.display = 'none';
 for (var i = 0; i < 6; i++) {
-  uploadEffect[i].addEventListener('click', function () {
+  uploadEffect[i].addEventListener('click', function (evt) {
     for (var j = 0; j < uploadEffect.length; j++) {
       effectImagePrewiew.classList.remove('effect-' + uploadEffect[j].value);
     }
     uploadEffectLevel.style.display = 'block';
-    effectImagePrewiew.classList.add('effect-' + this.value);
-    filterValue = this.value;
+    effectImagePrewiew.classList.add('effect-' + evt.target.value);
+    filterValue = evt.target.value;
     if (filterValue === 'none') {
       uploadEffectLevel.style.display = 'none';
     }
-    uploadLevelPin.style.left = '450px';
-    uploadLevelVal.style.width = 450 / 4.5 + '%';
+    uploadLevelPin.style.left = '100%';
+    uploadLevelVal.style.width = '100%';
     effectImagePrewiew.style.filter = '';
   });
 }
@@ -153,10 +165,13 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
       x: moveEvt.clientX
     };
     var newCoords = uploadLevelPin.offsetLeft + shift.x;
-    if (newCoords >= 0 && newCoords <= 450) {
+    var newCoordsMaxRight = uploadEffectLevelLine.offsetWidth;
+    var newCoordsPercent = newCoordsMaxRight / 100;
+
+    if (newCoords >= 0 && newCoords <= newCoordsMaxRight) {
       uploadLevelPin.style.left = newCoords + 'px';
-      uploadLevelVal.style.width = newCoords / 4.5 + '%';
-      uploadLevelValue.value = newCoords / 4.5;
+      uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
+      uploadLevelValue.value = newCoords / newCoordsPercent;
       switch (filterValue) {
         case 'chrome': effectImagePrewiew.style.filter = 'grayscale(' + uploadLevelValue.value / 100 + ')'; break;
         case 'sepia': effectImagePrewiew.style.filter = 'sepia(' + uploadLevelValue.value / 100 + ')'; break;
