@@ -55,11 +55,152 @@ for (var k = 0; k < PUBLICATIONS_COUNT; k++) {
   fragment.appendChild(getPublicationElement(createdPublication[k]));
 }
 
-var appendPictures = document.querySelector('.pictures');
-appendPictures.appendChild(fragment);
-var overLay = document.querySelector('.gallery-overlay');
-overLay.classList.remove('hidden');
+var picturesContainer = document.querySelector('.pictures');
+picturesContainer.appendChild(fragment);
 
-overLay.querySelector('.gallery-overlay-image').src = createdPublication[0].url;
-overLay.querySelector('.likes-count').textContent = createdPublication[0].likes + '';
-overLay.querySelector('.comments-count').textContent = createdPublication[0].comments.length + '';
+// 4 задание
+
+var ESC_СODE = 27;
+var STEP_CHANGE = 25;
+var uploadForm = document.querySelector('.upload-form');
+var uploadFile = uploadForm.querySelector('#upload-file');
+var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
+var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
+var resizeIncButton = uploadForm.querySelector('.upload-resize-controls-button-inc');
+var uploadResizeValue = uploadForm.querySelector('.upload-resize-controls-value');
+var effectImagePrewiew = uploadForm.querySelector('.effect-image-preview');
+var uploadEffect = uploadForm.querySelectorAll('[name="effect"]');
+var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
+var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
+var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
+var uploadLevelValue = uploadForm.querySelector('.upload-effect-level-value');
+var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
+var uploadFormOverlay = document.querySelector('.upload-overlay');
+var uploadMessage = document.querySelector('.upload-message');
+
+var gallery = document.querySelector('.gallery-overlay');
+var galleryClose = gallery.querySelector('.gallery-overlay-close');
+var galleryPreview = document.querySelector('.gallery-overlay-image');
+var galleryLikes = document.querySelector('.gallery-overlay-controls-like > .likes-count');
+var galleryComments = document.querySelector('.gallery-overlay-controls-comments > .comments-count');
+
+picturesContainer.addEventListener('click', function (evt) {
+  evt.preventDefault();
+
+  var target = evt.target;
+
+  while (target !== picturesContainer) {
+    if (target.className === 'picture') {
+      galleryPreview.src = target.querySelector('img').src;
+      galleryLikes.textContent = target.querySelector('.picture-likes').textContent;
+      galleryComments.textContent = target.querySelector('.picture-comments').textContent;
+      gallery.classList.remove('hidden');
+
+      return;
+    }
+    target = target.parentNode;
+  }
+});
+
+closeUploadFormButton.addEventListener('click', function () {
+  effectImagePrewiew.style.filter = 'none';
+  uploadFormOverlay.classList.add('hidden');
+  uploadMessage.classList.add('hidden');
+});
+
+galleryClose.addEventListener('click', function () {
+  gallery.classList.add('hidden');
+});
+
+uploadFile.addEventListener('change', function () {
+  uploadFormOverlay.classList.remove('hidden');
+  uploadMessage.classList.remove('hidden');
+  effectImagePrewiew.style.transform = 'scale(1)';
+});
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_СODE) {
+    uploadFormOverlay.classList.add('hidden');
+    uploadMessage.classList.add('hidden');
+  }
+});
+
+function resizeButtonHandler(evt) {
+  var uploadNumber = parseInt(uploadResizeValue.value, 10);
+  var type = evt.target.dataset.type;
+
+  if (type === 'dec' && uploadNumber > STEP_CHANGE && uploadNumber <= 100) {
+    uploadNumber = uploadNumber - STEP_CHANGE;
+  } else if (type === 'inc' && uploadNumber >= STEP_CHANGE && uploadNumber < 100) {
+    uploadNumber = uploadNumber + STEP_CHANGE;
+  }
+  uploadResizeValue.value = uploadNumber + '%';
+  effectImagePrewiew.style.transform = 'scale(' + uploadNumber / 100 + ')';
+}
+
+resizeDecButton.addEventListener('click', resizeButtonHandler);
+resizeIncButton.addEventListener('click', resizeButtonHandler);
+
+var filterValue = 'none';
+
+uploadEffectLevel.style.display = 'none';
+for (var i = 0; i < uploadEffect.length; i++) {
+  uploadEffect[i].addEventListener('click', function (evt) {
+    for (var j = 0; j < uploadEffect.length; j++) {
+      effectImagePrewiew.classList.remove('effect-' + uploadEffect[j].value);
+    }
+    uploadEffectLevel.style.display = 'block';
+    effectImagePrewiew.classList.add('effect-' + evt.target.value);
+    filterValue = evt.target.value;
+    if (filterValue === 'none') {
+      uploadEffectLevel.style.display = 'none';
+    }
+    uploadLevelPin.style.left = '100%';
+    uploadLevelVal.style.width = '100%';
+    effectImagePrewiew.style.filter = '';
+  });
+}
+
+uploadLevelPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: moveEvt.clientX - startCoords.x
+    };
+    startCoords = {
+      x: moveEvt.clientX
+    };
+    var newCoords = uploadLevelPin.offsetLeft + shift.x;
+    var newCoordsMaxWidth = uploadEffectLevelLine.offsetWidth;
+    var newCoordsPercent = newCoordsMaxWidth / 100;
+
+    if (newCoords >= 0 && newCoords <= newCoordsMaxWidth) {
+      uploadLevelPin.style.left = newCoords + 'px';
+      uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
+      uploadLevelValue.value = newCoords / newCoordsPercent;
+      switch (filterValue) {
+        case 'chrome': effectImagePrewiew.style.filter = 'grayscale(' + uploadLevelValue.value / 100 + ')'; break;
+        case 'sepia': effectImagePrewiew.style.filter = 'sepia(' + uploadLevelValue.value / 100 + ')'; break;
+        case 'marvin': effectImagePrewiew.style.filter = 'invert(' + uploadLevelValue.value + '%' + ')'; break;
+        case 'phobos': effectImagePrewiew.style.filter = 'blur(' + uploadLevelValue.value * 3 / 100 + 'px' + ')'; break;
+        case 'heat': effectImagePrewiew.style.filter = 'brightness(' + uploadLevelValue.value * 3 / 100 + ')'; break;
+      }
+    }
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+
