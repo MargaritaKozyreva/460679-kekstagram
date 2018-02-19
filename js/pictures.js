@@ -1,5 +1,5 @@
 'use strict';
-var ESC = 27;
+
 var createdPublication = [];
 var PUBLICATIONS_COUNT = 25;
 var COMMENT_PHRASE = [
@@ -55,9 +55,13 @@ for (var k = 0; k < PUBLICATIONS_COUNT; k++) {
   fragment.appendChild(getPublicationElement(createdPublication[k]));
 }
 
-var appendPictures = document.querySelector('.pictures');
-appendPictures.appendChild(fragment);
+var picturesContainer = document.querySelector('.pictures');
+picturesContainer.appendChild(fragment);
 
+// 4 задание
+
+var ESC_СODE = 27;
+var STEP_CHANGE = 25;
 var uploadForm = document.querySelector('.upload-form');
 var uploadFile = uploadForm.querySelector('#upload-file');
 var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
@@ -71,69 +75,76 @@ var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line'
 var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
 var uploadLevelValue = uploadForm.querySelector('.upload-effect-level-value');
 var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
-var picturesContainer = appendPictures.querySelectorAll('.picture');
-var overLay = document.querySelector('.gallery-overlay');
-var overLayClose = overLay.querySelector('.gallery-overlay-close');
-var filterValue = 'none';
+var uploadFormOverlay = document.querySelector('.upload-overlay');
+var uploadMessage = document.querySelector('.upload-message');
+
+var gallery = document.querySelector('.gallery-overlay');
+var galleryClose = gallery.querySelector('.gallery-overlay-close');
+var galleryPreview = document.querySelector('.gallery-overlay-image');
+var galleryLikes = document.querySelector('.gallery-overlay-controls-like > .likes-count');
+var galleryComments = document.querySelector('.gallery-overlay-controls-comments > .comments-count');
+
+picturesContainer.addEventListener('click', function (evt) {
+  evt.preventDefault();
+
+  var target = evt.target;
+
+  while (target !== picturesContainer) {
+    if (target.className === 'picture') {
+      galleryPreview.src = target.querySelector('img').src;
+      galleryLikes.textContent = target.querySelector('.picture-likes').textContent;
+      galleryComments.textContent = target.querySelector('.picture-comments').textContent;
+      gallery.classList.remove('hidden');
+
+      return;
+    }
+    target = target.parentNode;
+  }
+});
+
+closeUploadFormButton.addEventListener('click', function () {
+  effectImagePrewiew.style.filter = 'none';
+  uploadFormOverlay.classList.add('hidden');
+  uploadMessage.classList.add('hidden');
+});
+
+galleryClose.addEventListener('click', function () {
+  gallery.classList.add('hidden');
+});
 
 uploadFile.addEventListener('change', function () {
-  document.querySelector('.upload-overlay').classList.remove('hidden');
-  document.querySelector('.upload-message').classList.remove('hidden');
+  uploadFormOverlay.classList.remove('hidden');
+  uploadMessage.classList.remove('hidden');
   effectImagePrewiew.style.transform = 'scale(1)';
 });
 
-for (var z = 0; z < picturesContainer.length; z++) {
-  picturesContainer[z].addEventListener('click', function (evt) {
-    evt.preventDefault();
-    overLay.classList.remove('hidden');
-    document.querySelector('.gallery-overlay-image').src = evt.target.getAttribute('src');
-    document.querySelector('.likes-count').textContent = event.target.className = '' ;
-    document.querySelector('.comments-count').textContent = '';
-  });
-}
-
-function closePhoto(val) {
-  val.addEventListener('click', function () {
-    effectImagePrewiew.style.filter = 'none';
-    document.querySelector('.upload-overlay').classList.add('hidden');
-    document.querySelector('.upload-message').classList.add('hidden');
-    overLay.classList.add('hidden');
-  });
-}
-
-closePhoto(closeUploadFormButton);
-closePhoto(overLayClose);
-
 document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ESC) {
-    document.querySelector('.upload-overlay').classList.add('hidden');
-    document.querySelector('.upload-message').classList.add('hidden');
-    effectImagePrewiew.style.filter = 'none';
+  if (evt.keyCode === ESC_СODE) {
+    uploadFormOverlay.classList.add('hidden');
+    uploadMessage.classList.add('hidden');
   }
 });
 
-var STEP_CHANGE = 25;
-
-resizeDecButton.addEventListener('click', function () {
+function resizeButtonHandler(evt) {
   var uploadNumber = parseInt(uploadResizeValue.value, 10);
-  if (uploadNumber > STEP_CHANGE && uploadNumber <= 100) {
+  var type = evt.target.dataset.type;
+
+  if (type === 'dec' && uploadNumber > STEP_CHANGE && uploadNumber <= 100) {
     uploadNumber = uploadNumber - STEP_CHANGE;
-    uploadResizeValue.value = uploadNumber + '%';
-    effectImagePrewiew.style.transform = 'scale(' + uploadNumber / 100 + ')';
-  }
-});
-
-resizeIncButton.addEventListener('click', function () {
-  var uploadNumber = parseInt(uploadResizeValue.value, 10);
-  if (uploadNumber >= STEP_CHANGE && uploadNumber < 100) {
+  } else if (type === 'inc' && uploadNumber >= STEP_CHANGE && uploadNumber < 100) {
     uploadNumber = uploadNumber + STEP_CHANGE;
-    uploadResizeValue.value = uploadNumber + '%';
-    effectImagePrewiew.style.transform = 'scale(' + uploadNumber / 100 + ')';
   }
-});
+  uploadResizeValue.value = uploadNumber + '%';
+  effectImagePrewiew.style.transform = 'scale(' + uploadNumber / 100 + ')';
+}
+
+resizeDecButton.addEventListener('click', resizeButtonHandler);
+resizeIncButton.addEventListener('click', resizeButtonHandler);
+
+var filterValue = 'none';
 
 uploadEffectLevel.style.display = 'none';
-for (var i = 0; i < 6; i++) {
+for (var i = 0; i < uploadEffect.length; i++) {
   uploadEffect[i].addEventListener('click', function (evt) {
     for (var j = 0; j < uploadEffect.length; j++) {
       effectImagePrewiew.classList.remove('effect-' + uploadEffect[j].value);
@@ -165,10 +176,10 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
       x: moveEvt.clientX
     };
     var newCoords = uploadLevelPin.offsetLeft + shift.x;
-    var newCoordsMaxRight = uploadEffectLevelLine.offsetWidth;
-    var newCoordsPercent = newCoordsMaxRight / 100;
+    var newCoordsMaxWidth = uploadEffectLevelLine.offsetWidth;
+    var newCoordsPercent = newCoordsMaxWidth / 100;
 
-    if (newCoords >= 0 && newCoords <= newCoordsMaxRight) {
+    if (newCoords >= 0 && newCoords <= newCoordsMaxWidth) {
       uploadLevelPin.style.left = newCoords + 'px';
       uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
       uploadLevelValue.value = newCoords / newCoordsPercent;
@@ -191,4 +202,5 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
+
 
