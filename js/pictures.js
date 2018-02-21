@@ -62,7 +62,7 @@ picturesContainer.appendChild(fragment);
 
 var ESC_СODE = 27;
 var STEP_CHANGE = 25;
-var uploadForm = document.querySelector('.upload-form');
+var uploadForm = document.querySelector('#upload-select-image');
 var uploadFile = uploadForm.querySelector('#upload-file');
 var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
 var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
@@ -122,6 +122,7 @@ document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_СODE) {
     uploadFormOverlay.classList.add('hidden');
     uploadMessage.classList.add('hidden');
+    uploadForm.reset();
   }
 });
 
@@ -205,20 +206,19 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
 
 // 5 задание
 
-var uploadFormHashtags = uploadForm.querySelector('.upload-form-hashtags');
-var uploadFormDesc = uploadForm.querySelector('.upload-form-description');
-var uploadSubmit = document.querySelector('upload-submit');
-
-function descriptionInvalid() {
-  if (uploadFormDesc.validity.tooLong) {
-    uploadFormDesc.setCustomValidity('длина комментария не может составлять больше 140 символов');
-    uploadFormDesc.style.outline = '1px solid red';
-  }
-}
+var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
+var uploadFormDesc = document.querySelector('.upload-form-description');
 
 function descriptionValid() {
   uploadFormDesc.setCustomValidity('');
   uploadFormDesc.style.outline = '';
+}
+
+function descriptionInvalid() {
+  if (uploadFormDesc.validity.tooLong) {
+    uploadFormDesc.setCustomValidity('длина комментария не может составлять больше 140 символов');
+    uploadFormDesc.style.outline = '2px dotted red';
+  }
 }
 
 function hashtagsValid() {
@@ -226,40 +226,53 @@ function hashtagsValid() {
   uploadFormHashtags.setCustomValidity('');
 }
 
-function onHashtagsFieldInvalid() {
-  var hashtagValue = uploadFormHashtags.value;
+var invalidityText;
+var hashtagValue;
+
+function hashtagsInvalid() {
+
+  hashtagValue = uploadFormHashtags.value.trim();
+
   if (hashtagValue) {
     var hashtagsArray = hashtagValue.split(' ');
-    var validityMessage = false;
 
-    for (var x = 0; x < hashtagsArray.length && validityMessage === ''; x++) {
+    invalidityText = '';
+
+    for (var x = 0; x < hashtagsArray.length && invalidityText === ''; x++) {
       if (!(hashtagsArray[x].startsWith('#'))) {
-        validityMessage = 'Хэш-тег должен начинаться с символа "#" (решётка)';
+        invalidityText = 'Хэш-тег начинается с символа # (решётка) и состоит из одного слова';
+      } else if (hashtagsArray.indexOf(hashtagsArray[x]) !== x) {
+        invalidityText = 'Один и тот же хэш-тег не может быть использован дважды';
       } else if (hashtagsArray[x].split('#').length > 2) {
-        validityMessage = 'Хэш-теги должны разделяться пробелами';
-      } else if (hashtagsArray.indexOf(hashtagsArray[x]) !== -1) {
-        validityMessage = 'Один и тот же хэш-тег не может быть использован дважды';
-      } else if (hashtagsArray[x].length > 21) {
-        validityMessage = 'Максимальная длина одного хэш-тега должна быть не больше 20 символов';
+        invalidityText = 'Хэш-теги должны разделяться пробелами';
+      } else if (hashtagsArray[x].length > 21) { // учитываем #
+        invalidityText = 'Максимальная длина одного хэш-тега 20 символов';
       } else if (hashtagsArray.length > 5) {
-        validityMessage = 'Хэш-тегов не может быть больше пяти';
+        invalidityText = 'Вы не должны указать больше пяти (5) хэш-тегов';
       }
     }
 
-    if (validityMessage) {
-      uploadFormHashtags.style.outline = '1px solid red';
-      uploadFormHashtags.setCustomValidity(validityMessage);
+    if (invalidityText) {
+      uploadFormHashtags.style.outline = '2px solid red';
+      uploadFormHashtags.setCustomValidity(invalidityText);
     } else {
       hashtagsValid();
     }
   }
 }
 
-uploadFormHashtags.addEventListener('change', hashtagsValid);
+uploadFormHashtags.addEventListener('change', hashtagsValid, false);
 
 uploadForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
+  invalidityText = '';
+  hashtagsInvalid();
   descriptionInvalid();
-  onHashtagsFieldInvalid();
-  uploadForm.reset();
-})
+  if (!invalidityText) {
+    descriptionValid();
+    uploadFormOverlay.classList.add('hidden');
+    uploadMessage.classList.add('hidden');
+    uploadForm.reset();
+  }
+});
+
