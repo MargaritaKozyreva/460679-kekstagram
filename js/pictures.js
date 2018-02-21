@@ -217,7 +217,7 @@ function descriptionValid() {
 function descriptionInvalid() {
   if (uploadFormDesc.validity.tooLong) {
     uploadFormDesc.setCustomValidity('длина комментария не может составлять больше 140 символов');
-    uploadFormDesc.style.outline = '2px dotted red';
+    uploadFormDesc.style.outline = '2px solid red';
   }
 }
 
