@@ -103,9 +103,11 @@ picturesContainer.addEventListener('click', function (evt) {
 });
 
 closeUploadFormButton.addEventListener('click', function () {
+  formClear();
   effectImagePrewiew.style.filter = 'none';
   uploadFormOverlay.classList.add('hidden');
   uploadMessage.classList.add('hidden');
+  uploadForm.reset();
 });
 
 galleryClose.addEventListener('click', function () {
@@ -120,6 +122,7 @@ uploadFile.addEventListener('change', function () {
 
 document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_СODE) {
+    formClear();
     uploadFormOverlay.classList.add('hidden');
     uploadMessage.classList.add('hidden');
     uploadForm.reset();
@@ -262,6 +265,11 @@ function hashtagsInvalid() {
 }
 
 uploadFormHashtags.addEventListener('change', hashtagsValid, false);
+
+function formClear() {
+  hashtagsValid();
+  descriptionValid();
+}
 
 uploadForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
