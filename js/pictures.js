@@ -68,7 +68,7 @@ var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
 var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
 var resizeIncButton = uploadForm.querySelector('.upload-resize-controls-button-inc');
 var uploadResizeValue = uploadForm.querySelector('.upload-resize-controls-value');
-var effectImagePrewiew = uploadForm.querySelector('.effect-image-preview');
+var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
 var uploadEffect = uploadForm.querySelectorAll('[name="effect"]');
 var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
 var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
@@ -103,11 +103,15 @@ picturesContainer.addEventListener('click', function (evt) {
 });
 
 closeUploadFormButton.addEventListener('click', function () {
+  photoClear();
   formClear();
-  effectImagePrewiew.style.filter = 'none';
-  uploadFormOverlay.classList.add('hidden');
-  uploadMessage.classList.add('hidden');
-  uploadForm.reset();
+});
+
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_СODE) {
+    photoClear();
+    formClear();
+  }
 });
 
 galleryClose.addEventListener('click', function () {
@@ -117,16 +121,7 @@ galleryClose.addEventListener('click', function () {
 uploadFile.addEventListener('change', function () {
   uploadFormOverlay.classList.remove('hidden');
   uploadMessage.classList.remove('hidden');
-  effectImagePrewiew.style.transform = 'scale(1)';
-});
-
-document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ESC_СODE) {
-    formClear();
-    uploadFormOverlay.classList.add('hidden');
-    uploadMessage.classList.add('hidden');
-    uploadForm.reset();
-  }
+  effectImagePreview.style.transform = 'scale(1)';
 });
 
 function resizeButtonHandler(evt) {
@@ -139,7 +134,7 @@ function resizeButtonHandler(evt) {
     uploadNumber = uploadNumber + STEP_CHANGE;
   }
   uploadResizeValue.value = uploadNumber + '%';
-  effectImagePrewiew.style.transform = 'scale(' + uploadNumber / 100 + ')';
+  effectImagePreview.style.transform = 'scale(' + uploadNumber / 100 + ')';
 }
 
 resizeDecButton.addEventListener('click', resizeButtonHandler);
@@ -151,17 +146,17 @@ uploadEffectLevel.style.display = 'none';
 for (var i = 0; i < uploadEffect.length; i++) {
   uploadEffect[i].addEventListener('click', function (evt) {
     for (var j = 0; j < uploadEffect.length; j++) {
-      effectImagePrewiew.classList.remove('effect-' + uploadEffect[j].value);
+      effectImagePreview.classList.remove('effect-' + uploadEffect[j].value);
     }
     uploadEffectLevel.style.display = 'block';
-    effectImagePrewiew.classList.add('effect-' + evt.target.value);
+    effectImagePreview.classList.add('effect-' + evt.target.value);
     filterValue = evt.target.value;
     if (filterValue === 'none') {
       uploadEffectLevel.style.display = 'none';
     }
     uploadLevelPin.style.left = '100%';
     uploadLevelVal.style.width = '100%';
-    effectImagePrewiew.style.filter = '';
+    effectImagePreview.style.filter = '';
   });
 }
 
@@ -188,11 +183,11 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
       uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
       uploadLevelValue.value = newCoords / newCoordsPercent;
       switch (filterValue) {
-        case 'chrome': effectImagePrewiew.style.filter = 'grayscale(' + uploadLevelValue.value / 100 + ')'; break;
-        case 'sepia': effectImagePrewiew.style.filter = 'sepia(' + uploadLevelValue.value / 100 + ')'; break;
-        case 'marvin': effectImagePrewiew.style.filter = 'invert(' + uploadLevelValue.value + '%' + ')'; break;
-        case 'phobos': effectImagePrewiew.style.filter = 'blur(' + uploadLevelValue.value * 3 / 100 + 'px' + ')'; break;
-        case 'heat': effectImagePrewiew.style.filter = 'brightness(' + uploadLevelValue.value * 3 / 100 + ')'; break;
+        case 'chrome': effectImagePreview.style.filter = 'grayscale(' + uploadLevelValue.value / 100 + ')'; break;
+        case 'sepia': effectImagePreview.style.filter = 'sepia(' + uploadLevelValue.value / 100 + ')'; break;
+        case 'marvin': effectImagePreview.style.filter = 'invert(' + uploadLevelValue.value + '%' + ')'; break;
+        case 'phobos': effectImagePreview.style.filter = 'blur(' + uploadLevelValue.value * 3 / 100 + 'px' + ')'; break;
+        case 'heat': effectImagePreview.style.filter = 'brightness(' + uploadLevelValue.value * 3 / 100 + ')'; break;
       }
     }
   };
@@ -207,42 +202,59 @@ uploadLevelPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 });
 
-// 5 задание
+// module4-task2
 
 var uploadFormHashtags = document.querySelector('.upload-form-hashtags');
 var uploadFormDesc = document.querySelector('.upload-form-description');
 
-function descriptionValid() {
+function setValidDescriptionInput() {
   uploadFormDesc.setCustomValidity('');
   uploadFormDesc.style.outline = '';
 }
 
-function descriptionInvalid() {
+function checkInvalidDescriptionInput() {
   if (uploadFormDesc.validity.tooLong) {
     uploadFormDesc.setCustomValidity('длина комментария не может составлять больше 140 символов');
     uploadFormDesc.style.outline = '2px solid red';
   }
 }
 
-function hashtagsValid() {
+function setValidHashtagsInput() {
   uploadFormHashtags.style.outline = '';
   uploadFormHashtags.setCustomValidity('');
+}
+
+function photoClear() {
+  uploadEffectLevel.style.display = 'none';
+  effectImagePreview.style.filter = 'none';
+  uploadFormOverlay.classList.add('hidden');
+  uploadMessage.classList.add('hidden');
+}
+
+function formClear() {
+  setValidHashtagsInput();
+  setValidDescriptionInput();
+  uploadForm.reset();
 }
 
 var invalidityText;
 var hashtagValue;
 
-function hashtagsInvalid() {
+function checkValidHashtagsInput() {
 
   hashtagValue = uploadFormHashtags.value.trim();
 
   if (hashtagValue) {
-    var hashtagsArray = hashtagValue.split(' ');
+    var hashtagsArray = hashtagValue.split(' ').filter(function (hashtag) {
+      return hashtag.length !== 0;
+    });
 
     invalidityText = '';
 
-    for (var x = 0; x < hashtagsArray.length && invalidityText === ''; x++) {
-      if (!(hashtagsArray[x].startsWith('#'))) {
+    for (var x = 0; x < hashtagsArray.length; x++) {
+      if (hashtagsArray[x].length === 1) {
+        invalidityText = 'Хэш-тег не должен быть пустым';
+      } else if (hashtagsArray[x].indexOf('#') !== 0) {
         invalidityText = 'Хэш-тег начинается с символа # (решётка) и состоит из одного слова';
       } else if (hashtagsArray.indexOf(hashtagsArray[x]) !== x) {
         invalidityText = 'Один и тот же хэш-тег не может быть использован дважды';
@@ -253,31 +265,29 @@ function hashtagsInvalid() {
       } else if (hashtagsArray.length > 5) {
         invalidityText = 'Вы не должны указать больше пяти (5) хэш-тегов';
       }
-    }
 
-    if (invalidityText) {
-      uploadFormHashtags.style.outline = '2px solid red';
-      uploadFormHashtags.setCustomValidity(invalidityText);
-    } else {
-      hashtagsValid();
+      if (invalidityText !== '') {
+        uploadFormHashtags.style.outline = '2px solid red';
+        uploadFormHashtags.setCustomValidity(invalidityText);
+        return;
+      }
+
     }
   }
+  setValidHashtagsInput();
 }
 
-uploadFormHashtags.addEventListener('change', hashtagsValid, false);
-
-function formClear() {
-  hashtagsValid();
-  descriptionValid();
-}
+uploadFormHashtags.addEventListener('input', checkValidHashtagsInput, false);
 
 uploadForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   invalidityText = '';
-  hashtagsInvalid();
-  descriptionInvalid();
+
+  checkValidHashtagsInput();
+  checkInvalidDescriptionInput();
+
   if (!invalidityText) {
-    descriptionValid();
+    setValidDescriptionInput();
     uploadFormOverlay.classList.add('hidden');
     uploadMessage.classList.add('hidden');
     uploadForm.reset();
