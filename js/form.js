@@ -11,18 +11,16 @@
   var uploadFormOverlay = uploadForm.querySelector('.upload-overlay');
   var uploadMessage = uploadForm.querySelector('.upload-message');
   var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
-  var ESC_СODE = 27;
+
+  var closeUploadFromEsc = function (evt) {
+    window.CONSTANTS.isEscEvent(evt, closeUpload);
+  };
+
+  document.addEventListener('keydown', closeUploadFromEsc);
 
   closeUploadFormButton.addEventListener('click', function () {
-    photoClear();
-    formClear();
-  });
-
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ESC_СODE) {
-      photoClear();
-      formClear();
-    }
+    closeUpload();
+    document.removeEventListener('keydown', closeUploadFromEsc);
   });
 
   function setValidDescriptionInput() {
@@ -54,6 +52,11 @@
     setValidDescriptionInput();
     uploadForm.reset();
   }
+
+  var closeUpload = function () {
+    photoClear();
+    formClear();
+  };
 
   var invalidityText;
   var hashtagValue;

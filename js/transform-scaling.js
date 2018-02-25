@@ -1,13 +1,12 @@
 'use strict';
 
 (function () {
+  var STEP_CHANGE = window.CONSTANTS.STEP_CHANGE;
   var uploadForm = document.querySelector('#upload-select-image');
   var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
   var resizeIncButton = uploadForm.querySelector('.upload-resize-controls-button-inc');
   var uploadResizeValue = uploadForm.querySelector('.upload-resize-controls-value');
   var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
-
-  var STEP_CHANGE = 25;
 
   function resizeButtonHandler(evt) {
     var uploadNumber = parseInt(uploadResizeValue.value, 10);
