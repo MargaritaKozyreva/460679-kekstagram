@@ -101,17 +101,18 @@
   uploadFormHashtags.addEventListener('input', checkValidHashtagsInput, false);
 
   uploadForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    invalidityText = '';
+    var data = new FormData(uploadForm);
 
+    evt.preventDefault();
+
+    invalidityText = '';
     checkValidHashtagsInput();
     checkInvalidDescriptionInput();
 
     if (!invalidityText) {
+      var SubmitErr = window.messages.createMessage('error', 'Фото не отправлено!');
+      window.backend.send(new FormData(data), closeUpload(), SubmitErr);
       setValidDescriptionInput();
-      uploadFormOverlay.classList.add('hidden');
-      uploadMessage.classList.add('hidden');
-      uploadForm.reset();
     }
   });
 })();
