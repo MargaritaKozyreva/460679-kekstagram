@@ -103,17 +103,15 @@
   uploadForm.addEventListener('submit', function (evt) {
     var data = new FormData(uploadForm);
 
-    evt.preventDefault();
+    if (!invalidityText) {
+      closeUpload();
+      window.backend.upload(data, window.backend.onLoad, window.backend.onError);
+      setValidDescriptionInput();
+    }
 
+    evt.preventDefault();
     invalidityText = '';
     checkValidHashtagsInput();
     checkInvalidDescriptionInput();
-
-    if (!invalidityText) {
-      var SubmitErr = window.messages.createMessage('error', 'Фото не отправлено!');
-      window.backend.send(new FormData(data), closeUpload(), SubmitErr);
-      setValidDescriptionInput();
-    }
   });
 })();
-

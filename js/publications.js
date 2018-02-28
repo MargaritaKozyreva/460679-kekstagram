@@ -1,35 +1,7 @@
 'use strict';
 (function () {
   var CONSTANTS = window.CONSTANTS;
-
-  function getPhotoURL(id) {
-    return 'photos/' + id + '.jpg';
-  }
-
-  function getRandomNumber(maxValue, minValue) {
-    return Math.round(Math.random() * (maxValue - minValue) + minValue);
-  }
-
-  function getLikeValue() {
-    return getRandomNumber(CONSTANTS.LIKES.MAX, CONSTANTS.LIKES.MIN);
-  }
-
-  function getRandomComments() {
-    var commentsArray = [];
-    var randNumberComments = Math.round(Math.random() + 1);
-    for (var i = 0; i < randNumberComments; i++) {
-      commentsArray.push(CONSTANTS.COMMENT_PHRASE[Math.round(Math.random() * (CONSTANTS.COMMENT_PHRASE.length - 1))]);
-    }
-    return commentsArray;
-  }
-
-  function getPublication() {
-    return {
-      url: getPhotoURL(getRandomNumber(CONSTANTS.PUBLICATIONS_COUNT, 1)),
-      likes: getLikeValue(),
-      comments: getRandomComments()
-    };
-  }
+  var picturesContainer = document.querySelector('.pictures');
 
   function getPublicationElement(photo) {
     var similarPictureTemplate = document.querySelector('#picture-template').content;
@@ -40,16 +12,15 @@
     return photoElement;
   }
 
-  function generationAndRenderPictures(container) {
+  function successHandler(photos) {
+
     var fragment = document.createDocumentFragment();
-    var createdPublication = [];
 
     for (var k = 0; k < CONSTANTS.PUBLICATIONS_COUNT; k++) {
-      createdPublication.push(getPublication(k));
-      fragment.appendChild(getPublicationElement(createdPublication[k]));
+      fragment.appendChild(getPublicationElement(photos[k]));
     }
-
-    container.appendChild(fragment);
+    picturesContainer.appendChild(fragment);
+    picturesContainer.classList.remove('hidden');
   }
-  generationAndRenderPictures(document.querySelector('.pictures'));
+  window.backend.load(successHandler, window.backend.onError);
 })();
