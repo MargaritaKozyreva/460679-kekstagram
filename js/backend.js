@@ -57,6 +57,7 @@
   }
 
   window.backend = {
+
     onError: function (status) {
       window.messages.createMessage('error', status, 'red');
     },
@@ -77,7 +78,7 @@
       sendRequest({
         method: METHODS.POST,
         url: UPLOAD_URL,
-        onload: onLoad,
+        onLoad: onLoad,
         onError: onError,
         data: data
       });
