@@ -101,18 +101,17 @@
   uploadFormHashtags.addEventListener('input', checkValidHashtagsInput, false);
 
   uploadForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    invalidityText = '';
-
-    checkValidHashtagsInput();
-    checkInvalidDescriptionInput();
+    var data = new FormData(uploadForm);
 
     if (!invalidityText) {
+      closeUpload();
+      window.backend.upload(data, window.backend.onLoad, window.backend.onError);
       setValidDescriptionInput();
-      uploadFormOverlay.classList.add('hidden');
-      uploadMessage.classList.add('hidden');
-      uploadForm.reset();
     }
+
+    evt.preventDefault();
+    invalidityText = '';
+    checkValidHashtagsInput();
+    checkInvalidDescriptionInput();
   });
 })();
-
