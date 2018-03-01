@@ -3,11 +3,24 @@
 
   var DATA_URL = 'https://js.dump.academy/kekstagram/data';
   var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
+  var METHODS = {
+    GET: 'GET',
+    POST: 'POST'
+  };
+  var TIMEOUT = 10000;
+  var RESPONSE_TYPE = 'json';
 
-  var callback = function (method, url, onLoad, onError, data) {
+  function sendRequest(params) {
+
+    var method = params.method || METHODS.GET;
+    var url = params.url;
+    var onLoad = params.onLoad;
+    var onError = params.onError;
+    var data = params.data;
+
     var xhr = new XMLHttpRequest();
-    xhr.timeout = 10000;
-    xhr.responseType = 'json';
+    xhr.timeout = TIMEOUT;
+    xhr.responseType = RESPONSE_TYPE;
 
     function load() {
       switch (xhr.status) {
@@ -33,7 +46,7 @@
     }
 
     function timeout() {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
+      onError('Запрос не успел выполниться за ' + TIMEOUT + ' мс');
     }
 
     xhr.addEventListener('load', load);
@@ -41,14 +54,9 @@
     xhr.addEventListener('error', timeout);
     xhr.open(method, url);
     xhr.send(data);
-
-    return xhr;
-  };
+  }
 
   window.backend = {
-    DATA_URL: DATA_URL,
-    UPLOAD_URL: UPLOAD_URL,
-
     onError: function (status) {
       window.messages.createMessage('error', status, 'red');
     },
@@ -58,11 +66,21 @@
     },
 
     load: function (onLoad, onError) {
-      callback('GET', DATA_URL, onLoad, onError);
+      sendRequest({
+        url: DATA_URL,
+        onLoad: onLoad,
+        onError: onError
+      });
     },
 
     upload: function (data, onLoad, onError) {
-      callback('POST', UPLOAD_URL, onLoad, onError, data);
-    },
+      sendRequest({
+        method: METHODS.POST,
+        url: UPLOAD_URL,
+        onload: onLoad,
+        onError: onError,
+        data: data
+      });
+    }
   };
 })();

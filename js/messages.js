@@ -17,14 +17,5 @@
         document.body.removeChild(message);
       }, 3000);
     },
-
-    createComments: function (classname, text) {
-      var comments = document.createElement('div');
-      comments.className = classname;
-      comments.innerHTML = text;
-      comments.style.textAlign = 'center';
-      comments.style.backgroundColor = 'white';
-      document.body.insertBefore(comments, uploadForm);
-    }
   };
 })();
