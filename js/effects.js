@@ -1,5 +1,7 @@
 'use strict';
+
 (function () {
+
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
   var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
