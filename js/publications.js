@@ -1,5 +1,7 @@
 'use strict';
+
 (function () {
+
   var FILTERS_NAME = window.CONSTANTS.PUBLICATION_FILTERS;
   var LIKES = 'likes';
   var COMMENTS = 'comments';

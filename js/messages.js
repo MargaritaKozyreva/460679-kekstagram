@@ -11,7 +11,7 @@
       message.innerHTML = text;
       message.style.textAlign = 'center';
       message.style.backgroundColor = color;
-      message.style.zIndex = '999999';
+      message.style.zIndex = '1';
       document.body.insertBefore(message, uploadForm);
       setTimeout(function () {
         document.body.removeChild(message);

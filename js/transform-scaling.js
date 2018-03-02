@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var STEP_CHANGE = window.CONSTANTS.STEP_CHANGE;
   var uploadForm = document.querySelector('#upload-select-image');
   var resizeDecButton = uploadForm.querySelector('.upload-resize-controls-button-dec');
