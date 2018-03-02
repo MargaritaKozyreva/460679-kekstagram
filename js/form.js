@@ -66,9 +66,7 @@
     hashtagValue = uploadFormHashtags.value.trim();
 
     if (hashtagValue) {
-      var hashtagsArray = hashtagValue.split(' ').filter(function (hashtag) {
-        return hashtag.length !== 0;
-      });
+      var hashtagsArray = hashtagValue.split(' ');
 
       invalidityText = '';
 
