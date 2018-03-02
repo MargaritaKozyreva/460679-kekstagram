@@ -4,7 +4,7 @@
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadEffect = uploadForm.querySelector('.upload-effect-controls');
   var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
-  var FILTERS = window.CONSTANTS.FILTERS;
+  var FILTERS = window.CONSTANTS.CSS_FILTERS;
 
   var filterValue;
 

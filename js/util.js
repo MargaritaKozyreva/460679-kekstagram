@@ -11,7 +11,8 @@
       }
     },
     STEP_CHANGE: 25,
-    FILTERS: {
+
+    CSS_FILTERS: {
       NONE: {
         NAME: 'none'
       },
@@ -34,19 +35,14 @@
       HEAT: {
         NAME: 'heat',
         CSS_FILTER: 'brightness'
-      },
-      RECOMMEND: {
-        NAME: 'recommend'
-      },
-      POPULAR: {
-        NAME: 'popular'
-      },
-      DISCUSSED: {
-        NAME: 'discussed'
-      },
-      RANDOM: {
-        NAME: 'random'
       }
+    },
+
+    MAIN_FILTERS: {
+      RECOMMEND: 'recommend',
+      POPULAR: 'popular',
+      DISCUSSED: 'discussed',
+      RANDOM: 'random'
     }
   };
 })();
