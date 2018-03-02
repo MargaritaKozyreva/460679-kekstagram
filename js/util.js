@@ -10,6 +10,11 @@
         action();
       }
     },
+
+    getRandomIndex: function (array) {
+      return Math.floor(Math.random() * array.length);
+    },
+
     STEP_CHANGE: 25,
 
     CSS_FILTERS: {
@@ -38,7 +43,7 @@
       }
     },
 
-    MAIN_FILTERS: {
+    PUBLICATION_FILTERS: {
       RECOMMEND: 'recommend',
       POPULAR: 'popular',
       DISCUSSED: 'discussed',
