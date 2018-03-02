@@ -58,19 +58,18 @@
     formClear();
   };
 
-  var invalidityText;
+  var invalidityText = '';
   var hashtagValue;
 
   function checkValidHashtagsInput() {
 
     hashtagValue = uploadFormHashtags.value.trim();
+    invalidityText = '';
 
     if (hashtagValue) {
       var hashtagsArray = hashtagValue.split(' ');
 
-      invalidityText = '';
-
-      for (var x = 0; x < hashtagsArray.length; x++) {
+      for (var x = 0; x < hashtagsArray.length && hashtagsArray !== ''; x++) {
         if (hashtagsArray[x].length === 1) {
           invalidityText = 'Хэш-тег не должен быть пустым';
         } else if (hashtagsArray[x].indexOf('#') !== 0) {
