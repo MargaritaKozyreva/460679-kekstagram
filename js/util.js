@@ -10,8 +10,14 @@
         action();
       }
     },
+
+    getRandomIndex: function (array) {
+      return Math.floor(Math.random() * array.length);
+    },
+
     STEP_CHANGE: 25,
-    FILTERS: {
+
+    CSS_FILTERS: {
       NONE: {
         NAME: 'none'
       },
@@ -35,6 +41,13 @@
         NAME: 'heat',
         CSS_FILTER: 'brightness'
       }
+    },
+
+    PUBLICATION_FILTERS: {
+      RECOMMEND: 'recommend',
+      POPULAR: 'popular',
+      DISCUSSED: 'discussed',
+      RANDOM: 'random'
     }
   };
 })();

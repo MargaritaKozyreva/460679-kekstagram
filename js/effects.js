@@ -4,7 +4,6 @@
   var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
   var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
   var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
-  var uploadLevelValue = uploadForm.querySelector('.upload-effect-level-value');
   var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
 
   uploadLevelPin.addEventListener('mousedown', function (evt) {
@@ -28,8 +27,8 @@
       if (newCoords >= 0 && newCoords <= newCoordsMaxWidth) {
         uploadLevelPin.style.left = newCoords + 'px';
         uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
-        uploadLevelValue.value = newCoords / newCoordsPercent;
-        window.filters.setLevelEffect(uploadLevelValue.value);
+        uploadLevelVal.value = newCoords / newCoordsPercent;
+        window.filters.setLevelEffect(uploadLevelVal.value);
       }
     };
 
