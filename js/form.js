@@ -58,7 +58,7 @@
     formClear();
   };
 
-  var invalidityText = '';
+  var invalidityText;
   var hashtagValue;
 
   function checkValidHashtagsInput() {
