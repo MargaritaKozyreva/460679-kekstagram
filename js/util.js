@@ -34,6 +34,18 @@
       HEAT: {
         NAME: 'heat',
         CSS_FILTER: 'brightness'
+      },
+      RECOMMEND: {
+        NAME: 'recommend'
+      },
+      POPULAR: {
+        NAME: 'popular'
+      },
+      DISCUSSED: {
+        NAME: 'discussed'
+      },
+      RANDOM: {
+        NAME: 'random'
       }
     }
   };
