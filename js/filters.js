@@ -1,30 +1,31 @@
 'use strict';
+
 (function () {
 
+  var FILTERS = window.CONSTANTS.CSS_FILTERS;
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadEffect = uploadForm.querySelector('.upload-effect-controls');
   var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
-  var FILTERS = window.CONSTANTS.CSS_FILTERS;
 
   var filterValue;
 
-  var setValue = function (evt) {
+  function setValue(evt) {
     var target = evt.target;
     if (target.type === 'radio') {
       var filter = evt.target.value;
       window.effects.filterChange(filter);
       setFilter(filter);
     }
-  };
+  }
 
-  var setFilter = function (filter) {
+  function setFilter(filter) {
     effectImagePreview.classList = '';
     effectImagePreview.style = '';
     effectImagePreview.style.filter = '';
     effectImagePreview.classList.add('effect-' + filter);
     window.effects.resetSlider('100%');
     filterValue = filter;
-  };
+  }
 
   uploadEffect.addEventListener('click', setValue);
 

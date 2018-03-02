@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
 
   var DATA_URL = 'https://js.dump.academy/kekstagram/data';
@@ -9,6 +10,13 @@
   };
   var TIMEOUT = 10000;
   var RESPONSE_TYPE = 'json';
+  var CODE = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    SERVER_ERROR: 500
+  };
 
   function sendRequest(params) {
 
@@ -24,16 +32,19 @@
 
     function load() {
       switch (xhr.status) {
-        case 200:
+        case CODE.SUCCESS:
           onLoad(xhr.response);
           break;
-        case 400:
+        case CODE.BAD_REQUEST:
           onError('Статус ответа: ' + xhr.status + '. Неверный запрос.');
           break;
-        case 404:
+        case CODE.FORBIDDEN:
+          onError('Статус ответа: ' + xhr.status + '. Доступ запрещен.');
+          break;
+        case CODE.NOT_FOUND:
           onError('Статус ответа: ' + xhr.status + '. Ничего не найдено.');
           break;
-        case 500:
+        case CODE.SERVER_ERROR:
           onError('Статус ответа: ' + xhr.status + '. Внутренняя ошибка сервера.');
           break;
         default:

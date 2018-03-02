@@ -12,7 +12,7 @@
       x: evt.clientX,
     };
 
-    var onMouseMove = function (moveEvt) {
+    function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
       var shift = {
         x: moveEvt.clientX - startCoords.x
@@ -30,14 +30,14 @@
         uploadLevelVal.value = newCoords / newCoordsPercent;
         window.filters.setLevelEffect(uploadLevelVal.value);
       }
-    };
+    }
 
-    var onMouseUp = function (upEvt) {
+    function onMouseUp(upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    };
+    }
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
@@ -45,6 +45,7 @@
   uploadEffectLevel.style.display = 'none';
 
   window.effects = {
+
     filterChange: function (value) {
       if (value === 'none') {
         uploadEffectLevel.style.display = 'none';

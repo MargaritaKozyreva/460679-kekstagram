@@ -1,8 +1,7 @@
-// валидация формы
-
 'use strict';
 
 (function () {
+
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFormHashtags = uploadForm.querySelector('.upload-form-hashtags');
   var uploadFormDesc = uploadForm.querySelector('.upload-form-description');
@@ -12,9 +11,9 @@
   var uploadMessage = uploadForm.querySelector('.upload-message');
   var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
 
-  var closeUploadFromEsc = function (evt) {
+  function closeUploadFromEsc(evt) {
     window.CONSTANTS.isEscEvent(evt, closeUpload);
-  };
+  }
 
   document.addEventListener('keydown', closeUploadFromEsc);
 
@@ -53,10 +52,10 @@
     uploadForm.reset();
   }
 
-  var closeUpload = function () {
+  function closeUpload() {
     photoClear();
     formClear();
-  };
+  }
 
   var invalidityText;
   var hashtagValue;

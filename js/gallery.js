@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var gallery = document.querySelector('.gallery-overlay');
   var galleryPreview = document.querySelector('.gallery-overlay-image');
   var galleryLikes = document.querySelector('.gallery-overlay-controls-like > .likes-count');
@@ -25,7 +26,18 @@
       target = target.parentNode;
     }
   });
-  galleryClose.addEventListener('click', function () {
+
+  function photoClear() {
     gallery.classList.add('hidden');
+  }
+
+  galleryClose.addEventListener('click', function () {
+    photoClear();
   });
+
+  function closeUploadFromEsc(evt) {
+    window.CONSTANTS.isEscEvent(evt, photoClear);
+  }
+
+  document.addEventListener('keydown', closeUploadFromEsc);
 })();
