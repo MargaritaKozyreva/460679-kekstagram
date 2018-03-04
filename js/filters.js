@@ -3,35 +3,61 @@
 (function () {
 
   var FILTERS = window.CONSTANTS.CSS_FILTERS;
-  var uploadForm = document.querySelector('#upload-select-image');
-  var uploadEffect = uploadForm.querySelector('.upload-effect-controls');
-  var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
+  var STEP_CHANGE = window.CONSTANTS.STEP_CHANGE;
+  var resizeDecButton = document.querySelector('.upload-resize-controls-button-dec');
+  var resizeIncButton = document.querySelector('.upload-resize-controls-button-inc');
+  var resizeValue = document.querySelector('.upload-resize-controls-value');
+  var uploadEffect = document.querySelector('.upload-effect-controls');
+  var effectImagePreview = document.querySelector('.effect-image-preview');
 
-  var filterValue;
+  function resizeButtonHandler(evt) {
+    var uploadNumber = parseInt(resizeValue.value, 10);
+    var type = evt.target.dataset.type;
+
+    if (type === 'dec' && uploadNumber > STEP_CHANGE && uploadNumber <= 100) {
+      uploadNumber = uploadNumber - STEP_CHANGE;
+    } else if (type === 'inc' && uploadNumber >= STEP_CHANGE && uploadNumber < 100) {
+      uploadNumber = uploadNumber + STEP_CHANGE;
+    }
+    resizeValue.value = uploadNumber + '%';
+    effectImagePreview.style.transform = 'scale(' + uploadNumber / 100 + ')';
+  }
+
+  resizeDecButton.addEventListener('click', resizeButtonHandler);
+  resizeIncButton.addEventListener('click', resizeButtonHandler);
 
   function setValue(evt) {
     var target = evt.target;
     if (target.type === 'radio') {
       var filter = evt.target.value;
-      window.effects.filterChange(filter);
+      window.effects.switchSliderDisplay(filter);
       setFilter(filter);
     }
   }
 
-  function setFilter(filter) {
-    effectImagePreview.classList = '';
-    effectImagePreview.style = '';
-    effectImagePreview.style.filter = '';
-    effectImagePreview.classList.add('effect-' + filter);
+  var currentFilter;
+
+  function setFilter(filterName) {
+
+    resizeValue.value = '100%';
     window.effects.resetSlider('100%');
-    filterValue = filter;
+    effectImagePreview.style.transform = 'scale(1)';
+
+    if (currentFilter) {
+      effectImagePreview.classList.remove('effect-' + currentFilter);
+    }
+    effectImagePreview.classList.add('effect-' + filterName);
+    effectImagePreview.style.filter = '';
+
+    currentFilter = filterName;
+
   }
 
   uploadEffect.addEventListener('click', setValue);
 
   window.filters = {
     setLevelEffect: function (value) {
-      switch (filterValue) {
+      switch (currentFilter) {
 
         case FILTERS.CHROME.NAME: {
           effectImagePreview.style.filter = FILTERS.CHROME.CSS_FILTER + '(' + value / 100 + ')';

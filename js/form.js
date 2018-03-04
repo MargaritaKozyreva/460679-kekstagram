@@ -4,33 +4,33 @@
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFormHashtags = uploadForm.querySelector('.upload-form-hashtags');
-  var uploadFormDesc = uploadForm.querySelector('.upload-form-description');
+  var uploadFormDescription = uploadForm.querySelector('.upload-form-description');
   var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
   var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
   var uploadFormOverlay = uploadForm.querySelector('.upload-overlay');
   var uploadMessage = uploadForm.querySelector('.upload-message');
-  var closeUploadFormButton = uploadForm.querySelector('.upload-form-cancel');
+  var uploadFormCancel = uploadForm.querySelector('.upload-form-cancel');
 
-  function closeUploadFromEsc(evt) {
-    window.CONSTANTS.isEscEvent(evt, closeUpload);
+  function onEscPress(evt) {
+    window.CONSTANTS.isEscEvent(evt, closeUploadForm);
   }
 
-  document.addEventListener('keydown', closeUploadFromEsc);
+  document.addEventListener('keydown', onEscPress);
 
-  closeUploadFormButton.addEventListener('click', function () {
-    closeUpload();
-    document.removeEventListener('keydown', closeUploadFromEsc);
+  uploadFormCancel.addEventListener('click', function () {
+    closeUploadForm();
+    document.removeEventListener('keydown', onEscPress);
   });
 
   function setValidDescriptionInput() {
-    uploadFormDesc.setCustomValidity('');
-    uploadFormDesc.style.outline = '';
+    uploadFormDescription.style.outline = '';
+    uploadFormDescription.setCustomValidity('');
   }
 
   function checkInvalidDescriptionInput() {
-    if (uploadFormDesc.validity.tooLong) {
-      uploadFormDesc.setCustomValidity('длина комментария не может составлять больше 140 символов');
-      uploadFormDesc.style.outline = '2px solid red';
+    if (uploadFormDescription.validity.tooLong) {
+      uploadFormDescription.setCustomValidity('длина комментария не может составлять больше 140 символов');
+      uploadFormDescription.style.outline = '2px solid red';
     }
   }
 
@@ -39,22 +39,22 @@
     uploadFormHashtags.setCustomValidity('');
   }
 
-  function photoClear() {
+  function imageClear() {
     uploadEffectLevel.style.display = 'none';
     effectImagePreview.style.filter = 'none';
     uploadFormOverlay.classList.add('hidden');
     uploadMessage.classList.add('hidden');
   }
 
-  function formClear() {
+  function inputClear() {
     setValidHashtagsInput();
     setValidDescriptionInput();
     uploadForm.reset();
   }
 
-  function closeUpload() {
-    photoClear();
-    formClear();
+  function closeUploadForm() {
+    imageClear();
+    inputClear();
   }
 
   var invalidityText;
@@ -63,6 +63,7 @@
   function checkValidHashtagsInput() {
 
     hashtagValue = uploadFormHashtags.value.trim();
+    hashtagValue = hashtagValue.toLowerCase();
     invalidityText = '';
 
     if (hashtagValue) {
@@ -100,7 +101,7 @@
     var data = new FormData(uploadForm);
 
     if (!invalidityText) {
-      closeUpload();
+      closeUploadForm();
       window.backend.upload(data, window.backend.onLoad, window.backend.onError);
       setValidDescriptionInput();
     }

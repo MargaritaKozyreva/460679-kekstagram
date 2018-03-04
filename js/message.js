@@ -1,21 +1,21 @@
 'use strict';
 
 (function () {
+  var INTERVAL = 3000;
+  var filters = document.querySelector('.filters');
 
-  var uploadForm = document.querySelector('#upload-select-image');
-
-  window.messages = {
-    createMessage: function (classname, text, color) {
+  window.message = {
+    create: function (classname, text, color) {
       var message = document.createElement('div');
       message.className = classname;
-      message.innerHTML = text;
+      message.textContent = text;
       message.style.textAlign = 'center';
       message.style.backgroundColor = color;
       message.style.zIndex = '1';
-      document.body.insertBefore(message, uploadForm);
+      document.body.insertBefore(message, filters);
       setTimeout(function () {
         document.body.removeChild(message);
-      }, 3000);
+      }, INTERVAL);
     },
   };
 })();
