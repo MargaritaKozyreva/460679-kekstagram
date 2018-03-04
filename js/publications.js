@@ -8,7 +8,6 @@
 
   var picturesContainer = document.querySelector('.pictures');
   var filters = document.querySelector('.filters');
-  var fragment = document.createDocumentFragment();
 
   function getPublicationElement(picture) {
     var similarPictureTemplate = document.querySelector('#picture-template').content;
@@ -26,6 +25,8 @@
   }
 
   function showPictures(array) {
+    var fragment = document.createDocumentFragment();
+
     for (var k = 0; k < array.length; k++) {
       fragment.appendChild(getPublicationElement(array[k]));
     }
@@ -39,7 +40,6 @@
       mixedPictures.push(pictures[randomIndex]);
       pictures.splice(randomIndex, 1);
     }
-
     return mixedPictures;
   }
 
@@ -53,7 +53,6 @@
         return b.comments.length - a.comments.length;
       });
     }
-
     return pictures;
   }
 
@@ -85,7 +84,7 @@
       showPictures(filteredPictures);
     }
 
-    window.debounce.debounce(getValue);
+    window.debounce(getValue);
   }
 
   function successHandler(pictures) {

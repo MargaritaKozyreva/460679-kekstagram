@@ -30,7 +30,7 @@
     xhr.timeout = TIMEOUT;
     xhr.responseType = RESPONSE_TYPE;
 
-    function load() {
+    function contentLoadHandler() {
       switch (xhr.status) {
         case CODE.SUCCESS:
           onLoad(xhr.response);
@@ -52,17 +52,17 @@
       }
     }
 
-    function error() {
+    function contentErrorHandler() {
       onError('Ошибка соединения');
     }
 
-    function timeout() {
+    function contentTimeoutHandler() {
       onError('Запрос не успел выполниться за ' + TIMEOUT + ' мс');
     }
 
-    xhr.addEventListener('load', load);
-    xhr.addEventListener('error', error);
-    xhr.addEventListener('error', timeout);
+    xhr.addEventListener('load', contentLoadHandler);
+    xhr.addEventListener('error', contentErrorHandler);
+    xhr.addEventListener('error', contentTimeoutHandler);
     xhr.open(method, url);
     xhr.send(data);
   }
@@ -70,11 +70,11 @@
   window.backend = {
 
     onError: function (status) {
-      window.messages.createMessage('error', status, 'red');
+      window.messages.createText('error', status, 'red');
     },
 
     onLoad: function () {
-      window.messages.createMessage('success', 'Ваше фото успешно загружено.', 'green');
+      window.messages.createText('success', 'Ваше фото успешно загружено.', 'green');
     },
 
     load: function (onLoad, onError) {

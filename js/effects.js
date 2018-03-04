@@ -2,11 +2,11 @@
 
 (function () {
 
-  var uploadForm = document.querySelector('#upload-select-image');
-  var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
-  var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
-  var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
-  var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
+  var uploadEffectLevel = document.querySelector('.upload-effect-level');
+  var uploadEffectLevelLine = document.querySelector('.upload-effect-level-line');
+  var uploadLevelPin = document.querySelector('.upload-effect-level-pin');
+  var uploadLevelScale = document.querySelector('.upload-effect-level-val');
+  var uploadLevelValue = document.querySelector('.upload-effect-level-value');
 
   uploadLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -28,9 +28,10 @@
 
       if (newCoords >= 0 && newCoords <= newCoordsMaxWidth) {
         uploadLevelPin.style.left = newCoords + 'px';
-        uploadLevelVal.style.width = newCoords / newCoordsPercent + '%';
-        uploadLevelVal.value = newCoords / newCoordsPercent;
-        window.filters.setLevelEffect(uploadLevelVal.value);
+        uploadLevelScale.style.width = newCoords / newCoordsPercent + '%';
+        uploadLevelScale.value = parseInt(uploadLevelScale.style.width, 10);
+        uploadLevelValue.setAttribute('value', parseInt(uploadLevelScale.value, 10));
+        window.filters.setLevelEffect(uploadLevelValue.value);
       }
     }
 
@@ -48,7 +49,7 @@
 
   window.effects = {
 
-    filterChange: function (value) {
+    switchSliderDisplay: function (value) {
       if (value === 'none') {
         uploadEffectLevel.style.display = 'none';
       } else {
@@ -58,7 +59,8 @@
 
     resetSlider: function (value) {
       uploadLevelPin.style.left = value;
-      uploadLevelVal.style.width = value;
+      uploadLevelScale.style.width = value;
+      uploadLevelValue.setAttribute('value', parseInt(value, 10));
     }
   };
 })();
