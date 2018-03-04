@@ -11,13 +11,8 @@
   var uploadMessage = uploadForm.querySelector('.upload-message');
   var uploadFormCancel = uploadForm.querySelector('.upload-form-cancel');
 
-<<<<<<< HEAD
   function onEscPress(evt) {
     window.CONSTANTS.isEscEvent(evt, closeUploadForm);
-=======
-  function closeUploadFromEsc(evt) {
-    window.CONSTANTS.isEscEvent(evt, closeUpload);
->>>>>>> cf80999677006c89edd9b683084c794ccf068266
   }
 
   document.addEventListener('keydown', onEscPress);
@@ -57,15 +52,9 @@
     uploadForm.reset();
   }
 
-<<<<<<< HEAD
   function closeUploadForm() {
     imageClear();
     inputClear();
-=======
-  function closeUpload() {
-    photoClear();
-    formClear();
->>>>>>> cf80999677006c89edd9b683084c794ccf068266
   }
 
   var invalidityText;

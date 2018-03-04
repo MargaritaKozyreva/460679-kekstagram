@@ -36,7 +36,7 @@
   });
 
   function closeUploadFromEsc(evt) {
-    window.CONSTANTS.isEscEvent(evt, photoClear);
+    window.util.isEscEvent(evt, photoClear);
   }
 
   document.addEventListener('keydown', closeUploadFromEsc);

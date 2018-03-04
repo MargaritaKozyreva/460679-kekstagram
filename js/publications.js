@@ -36,7 +36,7 @@
   function shufflePictures(pictures) {
     var mixedPictures = [];
     while (mixedPictures.length < pictures.length) {
-      var randomIndex = window.CONSTANTS.getRandomIndex(pictures);
+      var randomIndex = window.util.getRandomIndex(pictures);
       mixedPictures.push(pictures[randomIndex]);
       pictures.splice(randomIndex, 1);
     }

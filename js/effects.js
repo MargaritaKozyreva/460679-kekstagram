@@ -2,19 +2,11 @@
 
 (function () {
 
-<<<<<<< HEAD
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
   var uploadEffectLevelLine = document.querySelector('.upload-effect-level-line');
   var uploadLevelPin = document.querySelector('.upload-effect-level-pin');
   var uploadLevelScale = document.querySelector('.upload-effect-level-val');
   var uploadLevelValue = document.querySelector('.upload-effect-level-value');
-=======
-  var uploadForm = document.querySelector('#upload-select-image');
-  var uploadEffectLevel = uploadForm.querySelector('.upload-effect-level');
-  var uploadEffectLevelLine = uploadForm.querySelector('.upload-effect-level-line');
-  var uploadLevelPin = uploadForm.querySelector('.upload-effect-level-pin');
-  var uploadLevelVal = uploadForm.querySelector('.upload-effect-level-val');
->>>>>>> cf80999677006c89edd9b683084c794ccf068266
 
   uploadLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -57,11 +49,7 @@
 
   window.effects = {
 
-<<<<<<< HEAD
     switchSliderDisplay: function (value) {
-=======
-    filterChange: function (value) {
->>>>>>> cf80999677006c89edd9b683084c794ccf068266
       if (value === 'none') {
         uploadEffectLevel.style.display = 'none';
       } else {
