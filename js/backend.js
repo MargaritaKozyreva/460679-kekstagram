@@ -70,11 +70,11 @@
   window.backend = {
 
     onError: function (status) {
-      window.messages.createText('error', status, 'red');
+      window.message.create('error', status, 'red');
     },
 
     onLoad: function () {
-      window.messages.createText('success', 'Ваше фото успешно загружено.', 'green');
+      window.message.create('success', 'Ваше фото успешно загружено.', 'green');
     },
 
     load: function (onLoad, onError) {

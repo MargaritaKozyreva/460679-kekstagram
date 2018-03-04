@@ -4,8 +4,8 @@
   var INTERVAL = 3000;
   var filters = document.querySelector('.filters');
 
-  window.messages = {
-    createText: function (classname, text, color) {
+  window.message = {
+    create: function (classname, text, color) {
       var message = document.createElement('div');
       message.className = classname;
       message.textContent = text;
