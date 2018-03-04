@@ -3,6 +3,7 @@
 (function () {
 
   var FILTERS = window.CONSTANTS.CSS_FILTERS;
+<<<<<<< HEAD
   var STEP_CHANGE = window.CONSTANTS.STEP_CHANGE;
   var resizeDecButton = document.querySelector('.upload-resize-controls-button-dec');
   var resizeIncButton = document.querySelector('.upload-resize-controls-button-inc');
@@ -22,6 +23,11 @@
     resizeValue.value = uploadNumber + '%';
     effectImagePreview.style.transform = 'scale(' + uploadNumber / 100 + ')';
   }
+=======
+  var uploadForm = document.querySelector('#upload-select-image');
+  var uploadEffect = uploadForm.querySelector('.upload-effect-controls');
+  var effectImagePreview = uploadForm.querySelector('.effect-image-preview');
+>>>>>>> cf80999677006c89edd9b683084c794ccf068266
 
   resizeDecButton.addEventListener('click', resizeButtonHandler);
   resizeIncButton.addEventListener('click', resizeButtonHandler);
@@ -35,6 +41,7 @@
     }
   }
 
+<<<<<<< HEAD
   var currentFilter;
 
   function setFilter(filterName) {
@@ -51,6 +58,15 @@
 
     currentFilter = filterName;
 
+=======
+  function setFilter(filter) {
+    effectImagePreview.classList = '';
+    effectImagePreview.style = '';
+    effectImagePreview.style.filter = '';
+    effectImagePreview.classList.add('effect-' + filter);
+    window.effects.resetSlider('100%');
+    filterValue = filter;
+>>>>>>> cf80999677006c89edd9b683084c794ccf068266
   }
 
   uploadEffect.addEventListener('click', setValue);
