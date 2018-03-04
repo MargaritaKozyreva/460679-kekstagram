@@ -12,7 +12,7 @@
   var uploadFormCancel = uploadForm.querySelector('.upload-form-cancel');
 
   function onEscPress(evt) {
-    window.CONSTANTS.isEscEvent(evt, closeUploadForm);
+    window.util.isEscEvent(evt, closeUploadForm);
   }
 
   document.addEventListener('keydown', onEscPress);
